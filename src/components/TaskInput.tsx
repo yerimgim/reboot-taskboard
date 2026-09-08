@@ -3,12 +3,13 @@ import { Input } from "./ui/input";
 import { useTaskStore } from "@/store/useTaskStore";
 import { Button } from "./ui/button";
 
-export function TaskInput() {
+export const TaskInput = () => {
   const [text, setText] = useState("");
   const addTask = useTaskStore((state) => state.addTask);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!text.trim()) return;
     addTask(text);
     setText("");
   };
@@ -19,8 +20,9 @@ export function TaskInput() {
         placeholder="할 일 작성하기"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        className="flex-1"
       ></Input>
       <Button type="submit">추가</Button>
     </form>
   );
-}
+};

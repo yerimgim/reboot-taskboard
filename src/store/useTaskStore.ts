@@ -9,6 +9,7 @@ type TaskState = {
 
 type TaskStoreActions = {
   addTask: (title: Task["title"], priority?: Task["priority"]) => void;
+  setFilter: (filter: FilterStatus) => void;
 };
 
 type TaskStore = TaskState & TaskStoreActions;
@@ -31,6 +32,7 @@ export const useTaskStore = create<TaskStore>()(
             },
           ],
         })),
+      setFilter: (filter) => set({ filter }),
     }),
     {
       name: "task-storage",

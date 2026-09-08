@@ -3,6 +3,8 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { Button } from "@/components/ui/button";
 import { TaskInput } from "./components/TaskInput";
 import { Moon, Sun } from "lucide-react";
+import { TaskList } from "./components/TaskList";
+import { TaskFilter } from "./components/TaskFilter";
 
 function App() {
   const { theme, setTheme } = useThemeStore();
@@ -23,6 +25,8 @@ function App() {
         </Button>
 
         <TaskInput />
+        <TaskFilter />
+        <TaskList />
       </div>
     </ThemeProvider>
   );
