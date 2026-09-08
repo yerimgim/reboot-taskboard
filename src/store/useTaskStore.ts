@@ -10,6 +10,7 @@ type TaskState = {
 type TaskStoreActions = {
   addTask: (title: Task["title"], priority?: Task["priority"]) => void;
   setFilter: (filter: FilterStatus) => void;
+  toggleTask: (id: Task["id"]) => void;
 };
 
 type TaskStore = TaskState & TaskStoreActions;
@@ -33,6 +34,12 @@ export const useTaskStore = create<TaskStore>()(
           ],
         })),
       setFilter: (filter) => set({ filter }),
+      toggleTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === id ? { ...task, completed: !task.completed } : task,
+          ),
+        })),
     }),
     {
       name: "task-storage",
