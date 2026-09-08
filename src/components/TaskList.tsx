@@ -2,6 +2,7 @@ import { useTaskStore } from "@/store/useTaskStore";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 export const TaskList = () => {
   const tasks = useTaskStore((state) => state.tasks);
@@ -30,15 +31,27 @@ export const TaskList = () => {
                 onCheckedChange={() => toggleTask(task.id)}
               />
               <span
-                className={`text-sm ${
+                className={`text-sm flex items-center gap-2 ${
                   task.completed ? "line-through" : "font-medium"
                 }`}
               >
+                <Badge
+                  variant={task.priority === "high" ? "destructive" : "outline"}
+                >
+                  {task.priority.slice(0, 4)}
+                </Badge>
                 {task.title}
               </span>
             </div>
-            <div className="flex items-center gap-2 backdrop-brightness-75">
-              <Button onClick={() => deleteTask(task.id)}>x</Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className=" p-2 text-muted-foreground hover:text-destructive"
+                onClick={() => deleteTask(task.id)}
+              >
+                x
+              </Button>
             </div>
           </CardContent>
         </Card>
