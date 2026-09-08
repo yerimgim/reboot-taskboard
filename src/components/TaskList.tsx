@@ -1,11 +1,13 @@
 import { useTaskStore } from "@/store/useTaskStore";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
+import { Button } from "./ui/button";
 
 export const TaskList = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const filter = useTaskStore((state) => state.filter);
   const toggleTask = useTaskStore((state) => state.toggleTask);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === "active") return !task.completed;
@@ -34,6 +36,9 @@ export const TaskList = () => {
               >
                 {task.title}
               </span>
+            </div>
+            <div className="flex items-center gap-2 backdrop-brightness-75">
+              <Button onClick={() => deleteTask(task.id)}>x</Button>
             </div>
           </CardContent>
         </Card>
