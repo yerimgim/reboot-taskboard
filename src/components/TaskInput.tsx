@@ -1,3 +1,26 @@
+import React, { useState } from "react";
+import { Input } from "./ui/input";
+import { useTaskStore } from "@/store/useTaskStore";
+import { Button } from "./ui/button";
+
 export function TaskInput() {
-  return <form></form>;
+  const [text, setText] = useState("");
+  const addTask = useTaskStore((state) => state.addTask);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addTask(text);
+    setText("");
+  };
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <Input
+        type="text"
+        placeholder="할 일 작성하기"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      ></Input>
+      <Button type="submit">추가</Button>
+    </form>
+  );
 }
