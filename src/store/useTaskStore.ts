@@ -15,6 +15,9 @@ type TaskStoreActions = {
 
 type TaskStore = TaskState & TaskStoreActions;
 
+const getValidTasks = (tasks: Task[]) =>
+  (tasks || []).filter((task) => Boolean(task && task.id));
+
 export const useTaskStore = create<TaskStore>()(
   persist(
     (set) => ({
@@ -23,7 +26,7 @@ export const useTaskStore = create<TaskStore>()(
       addTask: (title, priority = "medium") =>
         set((state) => ({
           tasks: [
-            ...state.tasks,
+            ...getValidTasks(state.tasks),
             {
               id: crypto.randomUUID(),
               title,
@@ -36,7 +39,7 @@ export const useTaskStore = create<TaskStore>()(
       setFilter: (filter) => set({ filter }),
       toggleTask: (id) =>
         set((state) => ({
-          tasks: state.tasks.map((task) =>
+          tasks: getValidTasks(state.tasks).map((task) =>
             task.id === id ? { ...task, completed: !task.completed } : task,
           ),
         })),

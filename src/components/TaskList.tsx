@@ -7,9 +7,7 @@ export const TaskList = () => {
   const filter = useTaskStore((state) => state.filter);
   const toggleTask = useTaskStore((state) => state.toggleTask);
 
-  const validTask = (tasks || []).filter((task) => Boolean(task && task.id));
-
-  const filteredTasks = validTask.filter((task) => {
+  const filteredTasks = tasks.filter((task) => {
     if (filter === "active") return !task.completed;
     if (filter === "completed") return task.completed;
     return true;
