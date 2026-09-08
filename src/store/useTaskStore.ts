@@ -12,6 +12,7 @@ type TaskStoreActions = {
   setFilter: (filter: FilterStatus) => void;
   toggleTask: (id: Task["id"]) => void;
   deleteTask: (id: Task["id"]) => void;
+  updateTaskTitle: (id: Task["id"], title: Task["title"]) => void;
 };
 
 type TaskStore = TaskState & TaskStoreActions;
@@ -47,6 +48,12 @@ export const useTaskStore = create<TaskStore>()(
       deleteTask: (id) =>
         set((state) => ({
           tasks: getValidTasks(state.tasks).filter((task) => task.id !== id),
+        })),
+      updateTaskTitle: (id, title) =>
+        set((state) => ({
+          tasks: getValidTasks(state.tasks).map((task) =>
+            task.id === id ? { ...task, id, title } : task,
+          ),
         })),
     }),
     {

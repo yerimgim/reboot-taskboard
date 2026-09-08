@@ -3,12 +3,31 @@ import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Pencil, X } from "lucide-react";
+import { useState } from "react";
+import { Input } from "@base-ui/react";
+import type { Task } from "@/types/task";
 
 export const TaskList = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const filter = useTaskStore((state) => state.filter);
   const toggleTask = useTaskStore((state) => state.toggleTask);
   const deleteTask = useTaskStore((state) => state.deleteTask);
+  const updateTaskTitle = useTaskStore((state) => state.updateTaskTitle);
+
+  const [editingId, setEditingId] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+
+  const handleStartEdit = (task: Task) => {
+    setEditTitle(task.title);
+    setEditingId(task.id);
+  };
+
+  const handleSave = (id: string) => {
+    if (!editTitle.trim()) return;
+    updateTaskTitle(id, editTitle);
+    setEditingId("");
+  };
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === "active") return !task.completed;
@@ -22,40 +41,91 @@ export const TaskList = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      {filteredTasks.map((task) => (
-        <Card key={task.id} className="transition-all">
-          <CardContent className="flex items-center justify-between p-4">
-            <div className="flex items-center gap-2">
-              <Checkbox
-                checked={task.completed}
-                onCheckedChange={() => toggleTask(task.id)}
-              />
-              <span
-                className={`text-sm flex items-center gap-2 ${
-                  task.completed ? "line-through" : "font-medium"
-                }`}
-              >
-                <Badge
-                  variant={task.priority === "high" ? "destructive" : "outline"}
-                >
-                  {task.priority.slice(0, 4)}
-                </Badge>
-                {task.title}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className=" p-2 text-muted-foreground hover:text-destructive"
-                onClick={() => deleteTask(task.id)}
-              >
-                x
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+      {filteredTasks.map((task) => {
+        const isEditing = editingId === task.id;
+
+        return (
+          <Card key={task.id} className="transition-all">
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  checked={task.completed}
+                  onCheckedChange={() => toggleTask(task.id)}
+                />
+                {isEditing ? (
+                  <>
+                    <Badge
+                      variant={
+                        task.priority === "high" ? "destructive" : "outline"
+                      }
+                    >
+                      {task.priority.slice(0, 4)}
+                    </Badge>
+                    <Input
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSave(task.id);
+                      }}
+                      autoFocus
+                      className="h-8 text-sm"
+                    />
+                  </>
+                ) : (
+                  <span
+                    onDoubleClick={() => handleStartEdit(task)}
+                    className={`text-sm flex items-center gap-2 ${
+                      task.completed ? "line-through" : "font-medium"
+                    }`}
+                    title="수정"
+                  >
+                    <Badge
+                      variant={
+                        task.priority === "high" ? "destructive" : "outline"
+                      }
+                    >
+                      {task.priority.slice(0, 4)}
+                    </Badge>
+                    {task.title}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {isEditing ? (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSave(task.id)}
+                      className="h-8 px-2 text-xs text-primary"
+                    >
+                      저장
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      className=""
+                      onClick={() => handleStartEdit(task)}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-muted-foreground hover:text-destructive"
+                      onClick={() => deleteTask(task.id)}
+                    >
+                      <X />
+                    </Button>
+                  </>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };
