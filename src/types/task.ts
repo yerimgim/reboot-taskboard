@@ -5,6 +5,6 @@ export type Task = {
   id: string;
   title: string;
   completed: boolean;
-  priority: Priority;
+  priority: Priority | string;
   createdAt: number;
 };

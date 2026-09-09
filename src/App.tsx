@@ -10,7 +10,6 @@ import { useTaskStore } from "./store/useTaskStore";
 function App() {
   const { theme, setTheme } = useThemeStore();
   const clearCompleted = useTaskStore((state) => state.clearCompleted);
-  const filter = useTaskStore((state) => state.filter);
   const tasks = useTaskStore((state) => state.tasks);
 
   return (
@@ -25,7 +24,7 @@ function App() {
               variant="outline"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              테마 색상: {theme.toUpperCase()}
+              테마 색상:
               {theme === "dark" ? <Moon /> : <Sun />}
             </Button>
           </div>
@@ -34,17 +33,19 @@ function App() {
             <TaskInput />
             <TaskFilter />
             <TaskList />
-            <div className="flex justify-end pt-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearCompleted}
-                className="text-xs hover:text-foreground"
-              >
-                <Trash />
-                완료된 항목 삭제
-              </Button>
-            </div>
+            {tasks.length === 0 || (
+              <div className="flex justify-end pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearCompleted}
+                  className="text-xs hover:text-foreground"
+                >
+                  <Trash />
+                  완료된 항목 삭제
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </main>

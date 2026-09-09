@@ -37,8 +37,8 @@ export const TaskList = () => {
 
   if (filteredTasks.length === 0) {
     return (
-      <div className="flex items-center justify-center text-sm">
-        <CalendarFold strokeWidth={1.25} /> 할 일을 등록해주세요
+      <div className="flex items-center justify-center text-sm m-4">
+        <CalendarFold strokeWidth={1.25} /> 할 일 찾아보기
       </div>
     );
   }
@@ -84,9 +84,16 @@ export const TaskList = () => {
                     title="수정"
                   >
                     <Badge
-                      variant={
-                        task.priority === "high" ? "destructive" : "outline"
-                      }
+                      variant="outline"
+                      className={`${
+                        task.priority === "high"
+                          ? "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                          : task.priority === "medium"
+                            ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                            : task.priority === "low"
+                              ? ""
+                              : ""
+                      }`}
                     >
                       {task.priority.slice(0, 4)}
                     </Badge>
@@ -94,7 +101,7 @@ export const TaskList = () => {
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 {isEditing ? (
                   <>
                     <Button
