@@ -13,6 +13,7 @@ type TaskStoreActions = {
   toggleTask: (id: Task["id"]) => void;
   deleteTask: (id: Task["id"]) => void;
   updateTaskTitle: (id: Task["id"], title: Task["title"]) => void;
+  clearCompleted: () => void;
 };
 
 type TaskStore = TaskState & TaskStoreActions;
@@ -54,6 +55,10 @@ export const useTaskStore = create<TaskStore>()(
           tasks: getValidTasks(state.tasks).map((task) =>
             task.id === id ? { ...task, id, title } : task,
           ),
+        })),
+      clearCompleted: () =>
+        set((state) => ({
+          tasks: getValidTasks(state.tasks).filter((task) => !task.completed),
         })),
     }),
     {

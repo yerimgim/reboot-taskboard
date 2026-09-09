@@ -2,32 +2,50 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { useThemeStore } from "@/store/useThemeStore";
 import { Button } from "@/components/ui/button";
 import { TaskInput } from "./components/TaskInput";
-import { Moon, Sun } from "lucide-react";
+import { Bell, Moon, Sun, Trash } from "lucide-react";
 import { TaskList } from "./components/TaskList";
 import { TaskFilter } from "./components/TaskFilter";
+import { useTaskStore } from "./store/useTaskStore";
 
 function App() {
   const { theme, setTheme } = useThemeStore();
+  const clearCompleted = useTaskStore((state) => state.clearCompleted);
 
   return (
     <ThemeProvider>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground transition-colors">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Reboot taskboard
-        </h1>
-        <p>Task & Theme 관리</p>
-        <Button
-          variant="outline"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          테마 색상: {theme.toUpperCase()}
-          {theme === "dark" ? <Moon /> : <Sun />}
-        </Button>
+      <main className="min-h-screen text-foreground bg-background">
+        <div className="mx-auto max-w-md px-4 py-12">
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="flex items-center gap-0.5 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              <Bell /> 오늘의 할 일
+            </h1>
+            <Button
+              variant="outline"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              테마 색상: {theme.toUpperCase()}
+              {theme === "dark" ? <Moon /> : <Sun />}
+            </Button>
+          </div>
 
-        <TaskInput />
-        <TaskFilter />
-        <TaskList />
-      </div>
+          <div className="flex flex-col gap-2">
+            <TaskInput />
+            <TaskFilter />
+            <TaskList />
+            <div className="flex justify-end pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearCompleted}
+                className="text-xs hover:text-foreground"
+              >
+                <Trash />
+                완료된 항목 삭제
+              </Button>
+            </div>
+          </div>
+        </div>
+      </main>
     </ThemeProvider>
   );
 }
