@@ -10,6 +10,8 @@ import { useTaskStore } from "./store/useTaskStore";
 function App() {
   const { theme, setTheme } = useThemeStore();
   const clearCompleted = useTaskStore((state) => state.clearCompleted);
+  const filter = useTaskStore((state) => state.filter);
+  const tasks = useTaskStore((state) => state.tasks);
 
   return (
     <ThemeProvider>

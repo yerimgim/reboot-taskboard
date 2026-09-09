@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Pencil, X } from "lucide-react";
+import { CalendarFold, Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@base-ui/react";
 import type { Task } from "@/types/task";
@@ -36,7 +36,11 @@ export const TaskList = () => {
   });
 
   if (filteredTasks.length === 0) {
-    return <div>할 일을 등록해주세요</div>;
+    return (
+      <div className="flex items-center justify-center text-sm">
+        <CalendarFold strokeWidth={1.25} /> 할 일을 등록해주세요
+      </div>
+    );
   }
 
   return (
