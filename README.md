@@ -35,3 +35,10 @@ pnpm install
 #### 2. 로컬 개발 서버 실행
 
 pnpm dev
+
+---
+
+- 추가할 기능들
+  - 대시보드기능 (tanstack router)
+  - search parmas 기반 필터 상태 URL 동기화
+  - Recharts 활용 완료율/우선순위/최근 7일 완료 추이 시각화 기능 추가
